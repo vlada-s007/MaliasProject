@@ -1,0 +1,421 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% load malias_tags %}
+{% load static %}
+{% block content %}
+
+<!-- START PAGE-CONTENT -->
+<section class="page-content">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+
+                {% include 'maliasStore/components/_page_menu.html' %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <!-- CATEGORY-MENU-LIST START -->
+                {% include 'maliasStore/components/_category_menu.html' %}
+
+                <!-- END CATEGORY-MENU-LIST -->
+
+                <!-- START SMALL-PRODUCT-AREA -->
+                {% include 'maliasStore/components/_sidebar_bestsellers.html' %}
+                <!-- END SMALL-PRODUCT-AREA -->
+
+                <!-- START SIDEBAR-BANNER -->
+                {% include 'maliasStore/components/_sidebar_banner.html' %}
+                <!-- END SIDEBAR-BANNER -->
+
+                {% include 'maliasStore/components/_sidebar_posts.html' %}
+
+
+            </div>
+            <div class="col-md-9 col-sm-12 col-xs-12">
+                <!-- Start Toch-Prond-Area -->
+                <div class="toch-prond-area">
+                    <div class="row">
+                        <div class="col-md-5 col-sm-5 col-xs-12">
+                            <div class="clear"></div>
+                            <div class="tab-content">
+                                <!-- Product = display-1-1 -->
+                                <div role="tabpanel" class="tab-pane fade in active" id="display-1">
+                                    <div class="row">
+                                        <div class="col-xs-12">
+                                            <div class="toch-photo">
+                                                <a href="#"><img src="{{ product.get_first_image }}"
+                                                                 data-imagezoom="true" alt="#"/></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% for img in product.images.all|slice:"1:" %}
+                                <!-- End Product = display-1-1 -->
+                                <!-- Start Product = display-1-2 -->
+                                <div role="tabpanel" class="tab-pane fade" id="display-{{img.pk}}">
+                                    <div class="row">
+                                        <div class="col-xs-12">
+                                            <div class="toch-photo">
+                                                <a href="#"
+                                                   style="aspect-ratio: 1/1; display:flex; align-items: center; justify-content: center;">
+                                                    <img src="{{ img.image.url }}" style="object-fit:cover !important;"
+                                                         data-imagezoom="true" alt="{{img.product.title}}"/></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                                <!-- End Product = display-1-2 -->
+
+
+                            </div>
+                            <!-- Start Toch-prond-Menu -->
+                            <div class="toch-prond-menu">
+                                <ul role="tablist">
+                                    <li role="presentation" class=" active" style="aspect-ratio: 1/1; display:flex;
+                                    align-items: center; justify-content: center !important; max-width:73px !important;  max-height: 73px !important;">
+                                        <a href="#display-1" role="tab" data-toggle="tab">
+                                            <img src="{{ product.get_first_image }}"
+                                                 style="object-fit:contain; max-width:62px !important; max-height: 62px !important;"
+                                                 alt="#"/>
+                                        </a>
+                                    </li>
+                                    {% for img in product.images.all|slice:"1:4" %}
+                                    <li role="presentation" style="aspect-ratio: 1/1; display:flex;
+                                    align-items: center; justify-content: center !important; max-width:73px !important; max-height: 73px !important;">
+                                        <a href="#display-{{img.pk}}"
+                                           role="tab"
+                                           data-toggle="tab">
+                                            <img src="{{ img.image.url }}"
+                                                 style="object-fit:contain; max-width:62px !important; max-height: 62px !important;"
+                                                 alt="#"/>
+                                        </a>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                                <ul role="tablist">
+                                    {% for img in product.images.all|slice:"4:8" %}
+                                    <li role="presentation" style="aspect-ratio: 1/1; display:flex;
+                                    align-items: center; justify-content: center !important; max-width:73px !important; max-height: 73px !important;">
+                                        <a href="#display-{{img.pk}}"
+                                           role="tab"
+                                           data-toggle="tab">
+                                            <img src="{{ img.image.url }}"
+                                                 style="object-fit:contain; max-width:62px !important; max-height: 62px !important;"
+                                                 alt="#"/>
+                                        </a>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+
+                            <!-- End Toch-prond-Menu -->
+                        </div>
+
+                        <div class="col-md-7 col-sm-7 col-xs-12">
+                            <h2 class="title-product">{{product.title}}</h2>
+<h4><a href="{{product.brand.get_absolute_url}}">{{product.brand.title}}</a></h4>
+<a href="{{product.model.get_absolute_url}}"><h4>{{product.model.title}} - {{product.version.title}}</h4></a>
+                            <div class="about-toch-prond">
+                                <p>
+                                    {% include 'maliasStore/components/_rating.html' %}
+                                    <a href="#">{{product.get_average_rating}} stars - {{product.reviews.count}} review(s)</a>
+                                    /
+                                    <a href="#reviews">Write a review</a>
+                                </p>
+                                <hr/>
+                                <p class="short-description">{{product.description|truncatechars:300}}</p>
+                                <hr/>
+                                {% if product.discount %}
+                                <span class="old-price">${{product.price|intcomma}}</span>
+                                {% endif %}
+                                <span class="current-price">${{product.get_price|intcomma}}</span>
+                                <span class="item-stock">Availability: <span class="text-stock">{{product.quantity}} in stock</span></span>
+                            </div>
+{% in_cart request product.pk as in_cart%}
+                            {% if in_cart is False %}
+
+                            <form action="{% url 'action_cart' product.pk 'add' %}" method="post">
+
+                                <div class="about-product">
+
+
+                                {% csrf_token %}
+
+
+                                </div>
+                                <div class="product-quantity">
+                                    <span>Qty</span>
+
+                                    <input type="number" name="quantity" formmethod="post" placeholder="1"/>
+
+
+                                    <button type="submit" class="toch-button toch-add-cart">Add to Cart</button>
+                                    {% else %}
+                                    <div class="product-quantity">
+                                    <a href="{% url 'cart' %}" class="toch-button toch-add-cart"
+                                    style="display: inline-block!important;">Go To Cart</a>
+                                    {% endif %}
+
+                                    {% get_wishlist request as favs %}
+                                    <a role="button" href="{% url 'action_wishlist' product.pk%}"
+                                            class="{% if product in favs %}active {% endif %}action_wishlist toch-button toch-wishlist"
+                                    style="display: inline-block!important;">
+                                        {% if product in favs %}
+                                        Remove from
+                                        {% endif %}Wishlist
+                                    </a>
+
+                                    <hr/>
+                                </div>
+
+
+</form>
+
+                        </div>
+                    </div>
+                    <!-- Start Toch-Box -->
+                    <div class="toch-box">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <!-- Start Toch-Menu -->
+                                <div class="toch-menu">
+                                    <ul role="tablist">
+                                        <li role="presentation" class=" active"><a href="#description" role="tab"
+                                                                                   data-toggle="tab">Description</a>
+                                        </li>
+                                        <li role="presentation"><a href="#specs" role="tab" data-toggle="tab">Specs</a>
+                                        </li>
+                                        <li role="presentation"><a href="#reviews" role="tab" data-toggle="tab">Reviews
+                                            ({{product.reviews.count}})</a></li>
+                                    </ul>
+                                </div>
+                                <!-- End Toch-Menu -->
+                                <div class="tab-content toch-description-review">
+                                    <!-- Start display-description -->
+                                    <div role="tabpanel" class="tab-pane fade in active" id="description">
+                                        <div class="row">
+                                            <div class="col-xs-12">
+                                                <div class="toch-description">
+                                                    <p>{{product.description}}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- End display-description -->
+
+                                    <!-- Start display-specs -->
+                                    <div role="tabpanel" class="tab-pane fade" id="specs">
+                                        <div class="row">
+                                            <div class="col-xs-12">
+                                                <div class="toch-reviews">
+                                                    <div class="toch-table">
+                                                        <table class="table table-striped table-bordered">
+                                                            <tbody>
+                                                            {% for spec in product.specs.all %}
+                                                            <tr>
+                                                                <td><strong>{{spec.specTitle}}</strong></td>
+                                                                <td class="text-right"><strong>{{spec.specDef}}</strong>
+                                                                </td>
+                                                            </tr>
+                                                            {% endfor %}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- End Product = display-specs -->
+                                    <div role="tabpanel" class="tab-pane fade" id="reviews">
+                                        <div class="row">
+                                            <div class="col-xs-12">
+                                                <div class="toch-reviews">
+                                                    <div class="toch-table">
+                                                        <table class="table table-striped table-bordered">
+                                                            {% if reviews %}
+                                                            {% for review in reviews %}
+                                                            <tbody>
+                                                            <tr>
+                                                                <td><strong>{{review.customer.user.first_name}}</strong>
+                                                                </td>
+                                                                <td class="text-right">
+                                                                    <strong>{{review.created_at}}</strong>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td colspan="2">
+                                                                    <p>{{review.content}}</p>
+                                                                    {% for key, value in review.get_rating_list.items %}
+                                                                    <button value="{{key}}">
+                                                                        {% if value is True %}<i class="fa fa-star"></i>
+                                                                        {% else %}
+                                                                        <i class="fa fa-star-o"></i>
+                                                                        {% endif %}
+                                                                    </button>
+
+                                                                    {% endfor %}
+
+                                                                </td>
+                                                            </tr>
+                                                            </tbody>
+                                                            {% endfor %}
+                                                            {% else %}
+                                                            <h5>No reviews yet...</h5>
+                                                            {% endif %}
+                                                        </table>
+                                                    </div>
+                                                    {% if not request.user.customer in review_authors and permission_review %}
+                                                    <div class="toch-review-title">
+                                                        <h2>Write a review</h2>
+                                                    </div>
+                                                    <form action="{% url 'action_review' %}" method="post">
+                                                        <div class="review-message">
+                                                            <div class="col-xs-12">
+                                                                {% csrf_token %}
+                                                                <p><sup>*</sup>Your comment <br>
+                                                                    <textarea class="form-control"
+                                                                              name="review-text"></textarea>
+                                                                </p>
+                                                            </div>
+                                                            <div class="help-block">
+                                                                <span class="note">Note:</span>
+                                                                HTML is not translated!
+                                                            </div>
+                                                            <div class="get-rating">
+                                                                <span><sup>*</sup>Rating </span>
+                                                                Bad
+                                                                <input type="radio" value="1" name="rating"/>
+                                                                <input type="radio" value="2" name="rating"/>
+                                                                <input type="radio" value="3" name="rating"/>
+                                                                <input type="radio" value="4" name="rating"/>
+                                                                <input type="radio" value="5" name="rating"/>
+                                                                Good
+                                                            </div>
+                                                            <div class="buttons clearfix">
+                                                                {% csrf_token %}
+                                                                <button class="btn btn-primary pull-right"
+                                                                        value="{{product.slug}}" name="product-review"
+                                                                        type="submit">Submit
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- End Product = display-reviews -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End Toch-Box -->
+                    <!-- START PRODUCT-AREA -->
+                    {% if same_model_products %}
+                    <div class="product-area">
+                        <div class="row">
+                            <div class="col-xs-12 col-md-12">
+                                <!-- Start Product-Menu -->
+                                <div class="product-menu">
+                                    <div class="product-title">
+                                        <h3 class="title-group-2 gfont-1">Alternative Colors</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End Product-Menu -->
+                        <div class="clear"></div>
+                        <!-- Start Product -->
+                        <div class="product carosel-navigation">
+                            <div class="row">
+                                <div class="active-product-carosel">
+                                    <!-- Start Single-Product -->
+                                    {% for product in same_model_products %}
+                                    {% include 'maliasStore/components/_similar_product_card.html' %}
+                                    {% endfor %}
+                                    <!-- End Single-Product -->
+
+                                </div>
+                            </div>
+
+                        </div>
+                        <!-- End Product -->
+                    </div>
+                    {% endif %}
+                    {% if product_versions %}
+                    <div class="product-area">
+                        <div class="row">
+                            <div class="col-xs-12 col-md-12">
+                                <!-- Start Product-Menu -->
+                                <div class="product-menu">
+                                    <div class="product-title">
+                                        <h3 class="title-group-2 gfont-1">Other Versions Of This Item</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End Product-Menu -->
+                        <div class="clear"></div>
+                        <!-- Start Product -->
+                        <div class="product carosel-navigation">
+                            <div class="row">
+                                <div class="active-product-carosel">
+                                    <!-- Start Single-Product -->
+                                    {% for product in product_versions %}
+                                    {% include 'maliasStore/components/_similar_product_card.html' %}
+                                    {% endfor %}
+                                    <!-- End Single-Product -->
+
+                                </div>
+                            </div>
+
+                        </div>
+                        <!-- End Product -->
+                    </div>
+                    {% endif %}
+                    {% if similar_products %}
+                    <div class="product-area">
+                        <div class="row">
+                            <div class="col-xs-12 col-md-12">
+                                <!-- Start Product-Menu -->
+                                <div class="product-menu">
+                                    <div class="product-title">
+                                        <h3 class="title-group-2 gfont-1">Recommended for you</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End Product-Menu -->
+                        <div class="clear"></div>
+                        <!-- Start Product -->
+                        <div class="product carosel-navigation">
+                            <div class="row">
+                                <div class="active-product-carosel">
+                                    <!-- Start Single-Product -->
+                                    {% for product in similar_products %}
+                                    {% include 'maliasStore/components/_similar_product_card.html' %}
+                                    {% endfor %}
+                                    <!-- End Single-Product -->
+
+                                </div>
+                            </div>
+
+                        </div>
+                        <!-- End Product -->
+                    </div>
+                    {% endif %}
+                    <!-- END PRODUCT-AREA -->
+                </div>
+                <!-- End Toch-Prond-Area -->
+            </div>
+        </div>
+    </div>
+    <!-- START BRAND-LOGO-AREA -->
+
+</section>
+{% endblock content %}

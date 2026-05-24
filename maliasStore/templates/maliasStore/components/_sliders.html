@@ -1,0 +1,71 @@
+{% load static %}
+<div class="slider-area">
+    <div class="bend niceties preview-1">
+        <div id="ensign-nivoslider" class="slides">
+            <img src="{% static 'img/sliders/slider-1/bg1.jpg' %}" alt="Malias"
+                 title="#slider-direction-1"/>
+            <img src="{% static 'img/sliders/slider-1/bg2.jpg' %}" alt="Malias"
+                 title="#slider-direction-2"/>
+            <img src="{% static 'img/sliders/slider-1/bg3.jpg' %}" alt="Malias"
+                 title="#slider-direction-3"/><!--
+									<img src="img/sliders/slider-1/bg4.jpg" alt="" title="#slider-direction-4"/>  -->
+        </div>
+        <!-- direction 1 -->
+        <div id="slider-direction-1" class="t-lfr slider-direction">
+            <div class="slider-progress"></div>
+            <!-- layer 1 -->
+            <div class="layer-1-1 ">
+                <h1 class="title1">HTC One M7</h1>
+            </div>
+            <!-- layer 2 -->
+            <div class="layer-1-2">
+                <p class="title2">Lorem ipsum dolor sit amet, consectetur.</p>
+            </div>
+            <!-- layer 3 -->
+            <div class="layer-1-3">
+                <h2 class="title3">$90</h2>
+            </div>
+            <!-- layer 4 -->
+            <div class="layer-1-4">
+                <a href="{% url 'product' slug='htc-one-m7-with-boomsound-stereo-speakers-aluminiu' %}" class="title4">Buy Now</a>
+            </div>
+        </div>
+        <!-- direction 2 -->
+        <div id="slider-direction-2" class="slider-direction">
+            <div class="slider-progress"></div>
+            <!-- layer 1 -->
+            <div class="layer-2-1">
+                <h1 class="title1">RUGGED SP88S TABLET</h1>
+            </div>
+            <!-- layer 2 -->
+            <div class="layer-2-2">
+                <p class="title2">INDUSTRIAL-LEVEL WATER RESISTANCE (IP67)</p>
+            </div>
+            <!-- layer 3 -->
+            <div class="layer-2-3">
+                <a href="{% url 'product' slug='sailproof-sp88s-8-inch-rugged-android-tablet' %}" class="title3">Buy Now</a>
+            </div>
+        </div>
+        <!-- direction 3 -->
+        <div id="slider-direction-3" class="slider-direction">
+            <div class="slider-progress"></div>
+            <!-- layer 1 -->
+            <div class="layer-3-1">
+                    <h2 class="title1">SONY XPERIA 10 VII</h2>
+            </div>
+            <!-- layer 2 -->
+            <div class="layer-3-2">
+                <h1 class="title2">SPECIAL OFFER</h1>
+            </div>
+            <!-- layer 3 -->
+            <div class="layer-3-3">
+                <p class="title3">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                    eiusmod tempor incididunt ut labore et.</p>
+            </div>
+            <!-- layer 4 -->
+            <div class="layer-3-4">
+                <a href="{% url 'product' slug='sony-xperia-10-vii-xq-fe72-turqoise' %}" class="title4">Buy now</a>
+            </div>
+        </div>
+    </div>
+</div>

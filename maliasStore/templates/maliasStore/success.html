@@ -1,0 +1,157 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+{% load malias_tags %}
+
+
+<!-- START PAGE-CONTENT -->
+{% block content %}
+<section class="page-content">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                {% include 'maliasStore/components/_page_menu.html' %}
+            </div>
+        </div>
+    </div>
+    <!-- Start About-Area -->
+    <div class="about-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="f-title text-center">
+                        <h3 class="title text-uppercase">Payment Successful</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-7 col-sm-12 col-xs-12">
+                    <div class="about-page-cntent">
+                        <h3>Success!</h3>
+                        <div class="panel-group" id="accordion">
+                            <div class="panel panel_default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        <a class="accordion-trigger collapsed" data-toggle="collapse"
+                                           data-parent="#accordion" href="#checkout-confirm">Current Order<i
+                                                class="fa fa-caret-down"></i> </a>
+                                    </h4>
+                                </div>
+                                <div id="checkout-confirm" class="collapse">
+                                    <div class="panel-body">
+                                        <!-- Start Table -->
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered">
+                                                <thead>
+                                                <tr>
+                                                    <td class="text-center">Image</td>
+                                                    <td class="text-left">Name</td>
+                                                    <td class="text-left">Model</td>
+                                                    <td class="text-left">Version</td>
+                                                    <td class="text-left">Quantity</td>
+                                                    <td class="text-right">Unit Price</td>
+                                                    <td class="text-right">Total</td>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                {% for item in order.products.all %}
+                                                <tr>
+                                                    <td class="text-center">
+                                                        <a href=""
+                                                           style="aspect-ratio: 4/5; max-width: 80px; max-height: 100px;">
+                                                            <img class="img-thumbnail"
+                                                                 style="max-width: 75px; max-height: 95px; padding:5px;"
+                                                                 src="{{item.get_image}}" alt="#"/></a>
+                                                    </td>
+                                                    <td class="text-left">
+                                                        <a href="{% url 'product' slug=item.slug %}">{{item.title}}</a>
+                                                    </td>
+                                                    <td class="text-left">
+                                                        <a href="#" aria-disabled="true">{{item.model}}</a>
+                                                    </td>
+                                                    <td class="text-left">
+                                                        <a href="#" aria-disabled="true">{{item.version}}</a>
+                                                    </td>
+                                                    <td class="text-right">{{item.quantity}}</td>
+                                                    <td class="text-right">${{item.price|intcomma}}</td>
+                                                    <td class="text-right">${{item.total_price|intcomma}}</td>
+                                                </tr>
+                                                {% endfor %}
+                                                </tbody>
+
+                                                <tfoot>
+<tr>
+                                                     <td class="text-right" colspan="6">
+                                                            <strong>Status:</strong>
+                                                        </td>
+                                                        <td class="text-right">{% if order.completed is True %}Delivered{% else %}Delivery In Progress{% endif %}
+                                                        </td>
+                                                    </tr>
+                                                <tr>
+                                                    <td class="text-right" colspan="6">
+                                                        <strong>Subtotal:</strong>
+                                                    </td>
+                                                    <td class="text-right">${{order.subtotal|intcomma}}</td>
+                                                </tr>
+
+                                                {% if order.voucher %}
+                                                <tr>
+                                                    <td class="text-right" colspan="6">
+                                                        <strong>Voucher:</strong>
+                                                    </td>
+                                                    <td class="text-right">-${{order.voucher|intcomma}}</td>
+                                                </tr>
+                                                {% endif %}
+
+                                                {% if order.coupon_discount %}
+                                                <tr>
+                                                    <td class="text-right" colspan="6">
+                                                        <strong>Coupon Discount:</strong>
+                                                    </td>
+                                                    <td class="text-right">-{{order.coupon_discount}}%</td>
+                                                </tr>
+                                                {% endif %}
+
+
+                                                {% if order.delivery_cost %}
+                                                <tr>
+                                                    <td class="text-right" colspan="6">
+                                                        <strong>Estimated Delivery Cost:</strong>
+                                                    </td>
+                                                    <td class="text-right">+${{order.delivery_cost}}</td>
+                                                </tr>
+                                                {% endif %}
+
+
+                                                <tr>
+                                                    <td class="text-right" colspan="6">
+                                                        <strong>Total:</strong>
+                                                    </td>
+                                                    <td class="text-right">${{order.price|intcomma}}</td>
+                                                </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
+
+                                        <!-- End Table -->
+                                        <div class="buttons pull-right">
+                                            <a href="{% url 'account' %}"
+                                               class="accordion-trigger btn btn-primary"
+                                               aria-expanded="true" type="button">Go To Account</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End About-Area -->
+    <!-- Start Our-Team -->
+    <!-- End Our-Team -->
+</section>
+<!-- END PAGE-CONTENT -->
+{% endblock content %}

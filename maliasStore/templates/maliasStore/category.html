@@ -1,0 +1,185 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+{% load malias_tags %}
+
+<!-- START PAGE-CONTENT -->
+<section class="page-content">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                {% include 'maliasStore/components/_page_menu.html' %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <!-- CATEGORY-MENU-LIST START -->
+                {% include 'maliasStore/components/_category_menu.html' %}
+
+
+                <!-- END CATEGORY-MENU-LIST -->
+                <!-- shop-filter start -->
+                {% include 'maliasStore/components/_category_filter.html' %}
+
+            </div>
+
+            <div class="col-md-9 col-xs-12">
+                <!-- START PRODUCT-BANNER -->
+                {% include 'maliasStore/components/_product_banner.html' %}
+                <!-- END PRODUCT-BANNER -->
+                <!-- START PRODUCT-AREA -->
+                <div class="product-area">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <!-- Start Product-Menu -->
+                            <div class="product-menu">
+                                <div class="product-title">
+                                    <h3 class="title-group-3 gfont-1">
+
+                                        {{category.title}}
+                                        {% if not category.parent.parent %}: All
+                                        {% endif %}</h3>
+                                </div>
+                            </div>
+                            <div class="product-filter">
+                                <ul role="tablist">
+                                    <li role="presentation" class="list">
+                                        <a href="#display-1-1" role="tab" data-toggle="tab"></a>
+                                    </li>
+                                    <li role="presentation" class="grid active">
+                                        <a href="#display-1-2" role="tab" data-toggle="tab"></a>
+                                    </li>
+                                </ul>
+                                <div class="sort">
+                                    <label>Sort By:</label>
+                                    <select>
+                                        <option value="#">Default</option>
+                                        <option value="#">Name (A - Z)</option>
+                                        <option value="#">Name (Z - A)</option>
+                                        <option value="#">Price (Low > High)</option>
+                                        <option value="#">Rating (Highest)</option>
+                                        <option value="#">Rating (Lowest)</option>
+                                        <option value="#">Name (A - Z)</option>
+                                        <option value="#">Model (Z - A))</option>
+                                        <option value="#">Model (A - Z)</option>
+                                    </select>
+                                </div>
+                                <div class="limit">
+                                    <label>Show:</label>
+                                    <select>
+                                        <option value="#">8</option>
+                                        <option value="#">16)</option>
+                                        <option value="#">24</option>
+                                        <option value="#">40</option>
+                                        <option value="#">80</option>
+                                        <option value="#">100</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- End Product-Menu -->
+                            <div class="clear"></div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                            <!-- Start Product -->
+                            <div class="product">
+                                <div class="tab-content">
+                                    <!-- Start Product-->
+                                    <div role="tabpanel" class="tab-pane fade in  active" id="display-1-1">
+                                        <div class="row">
+                                            <!-- Start Single-Product -->
+                                            {% if not products %}
+
+                                            <div class="col-md-3 col-sm-4 col-xs-12">
+                                                <h5>No items found...</h5>
+                                            </div>
+                                            {% endif %}
+                                            {% for product in products|slice:":4" %}
+
+                                            <div class="col-md-3 col-sm-4 col-xs-12">
+                                                {% include 'maliasStore/components/_product_card.html' %}
+                                            </div>
+                                            {% endfor %}
+                                        </div>
+                                        <div class="row">
+                                            {% for product in products|slice:"4:8" %}
+
+                                            <div class="col-md-3 col-sm-4 col-xs-12">
+                                                {% include 'maliasStore/components/_product_card.html' %}
+                                            </div>
+                                            {% endfor %}
+                                        </div>
+                                        <div class="row">
+                                            {% for product in products|slice:"8:12" %}
+
+                                            <div class="col-md-3 col-sm-4 col-xs-12">
+                                                {% include 'maliasStore/components/_product_card.html' %}
+                                            </div>
+                                            {% endfor %}
+                                        </div>
+
+                                        <div class="row">
+                                            {% for product in products|slice:"12:16" %}
+
+                                            <div class="col-md-3 col-sm-4 col-xs-12">
+                                                {% include 'maliasStore/components/_product_card.html' %}
+                                            </div>
+                                            {% endfor %}
+                                        </div>
+                                        <!-- End Single-Product -->
+                                        <!-- Start Pagination Area -->
+                                        {% include 'maliasStore/components/_pagination.html' %}
+                                        <!-- End Pagination Area -->
+                                    </div>
+
+                                    <!-- End Product = TV -->
+                                </div>
+                            </div>
+                            <!-- End Product -->
+                        </div>
+                    </div>
+                </div>
+                <!-- END PRODUCT-AREA -->
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- QUICKVIEW PRODUCT -->
+
+<!-- END QUICKVIEW PRODUCT -->
+{% endblock content %}
+
+{% block modal %}
+
+{% if products %}
+{% for product in products|slice:":4" %}
+
+{% include 'maliasStore/components/_modal_quickview.html' %}
+
+{% endfor %}
+
+{% for product in products|slice:"4:8" %}
+
+{% include 'maliasStore/components/_modal_quickview.html' %}
+
+{% endfor %}
+
+{% for product in products|slice:"8:12" %}
+
+{% include 'maliasStore/components/_modal_quickview.html' %}
+
+{% endfor %}
+
+{% for product in products|slice:"12:16" %}
+
+{% include 'maliasStore/components/_modal_quickview.html' %}
+
+{% endfor %}
+
+{% endif %}
+{% endblock modal %}

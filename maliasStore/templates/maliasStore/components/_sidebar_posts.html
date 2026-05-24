@@ -1,0 +1,29 @@
+{% load malias_tags %}
+{% last_posts as posts %}
+<div class="shop-blog-area sidebar">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h3 class="title-group border-red gfont-1">RECENT POSTS </h3>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="active-recent-posts carosel-circle">
+                            <!-- Start Single-Recent-Posts -->
+                            {% for post in posts %}
+                            <div class="col-xs-12">
+                                <div class="single-recent-posts">
+                                    <div class="recent-posts-photo">
+                                        <img src="{{ post.image.url }}" alt="Recent Posts">
+                                    </div>
+                                    <div class="recent-posts-text">
+                                        <h5><a href="#" class="recent-posts-title">{{ post.title }}</a></h5>
+                                        <span class="recent-posts-date">{{ post.created_at|timesince }} ago | by {{ post.author }}</span>
+                                        <p class="posts-short-brif">{{ post.content|truncatechars:150}}</p>
+                                        <a href="#" class="posts-read-more">Read more ...</a>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>

@@ -1,0 +1,42 @@
+{% load humanize %}
+<div class="hot-deals-area carosel-circle">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="area-title">
+                                <h3 class="title-group border-red gfont-1">Hot Deals</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="active-hot-deals">
+                            {% for product in sale_products|slice:":4" %}
+                            <!-- Start Single-hot-deals -->
+                            <div class="col-xs-12">
+                                <div class="single-hot-deals" >
+                                    <div class="hot-deals-photo">
+                                        <a href="{{product.get_absolute_url}}" style="max-height:200px;">
+                                            <img src="{{ product.get_first_image }}"
+                                                 style="aspect-ratio: 1/1 !important;max-height:200px!important; object-fit: contain !important; padding: 10px 10px;"
+                                                 alt="{{ product.title }}"></a>
+                                    </div>
+                                    <div class="count-down">
+                                        <div class="timer">
+                                            <div data-countdown="2017/12/31"></div>
+                                        </div>
+                                    </div>
+                                    <div class="hot-deals-text"  style="max-height:125px;">
+                                        <h5><a href="{{ product.get_absolute_url }}" class="name-group">{{ product.title|truncatechars:25 }}</a></h5>
+                                        {% include 'maliasStore/components/_rating.html' %}
+                                        <div class="price-box">
+                                            <span class="price gfont-2">${{product.get_price|intcomma}}</span>
+                                            <span class="old-price gfont-2">${{product.price|intcomma}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+
+
+                        </div>
+                    </div>
+                </div>

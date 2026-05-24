@@ -1,0 +1,16 @@
+{% load humanize %}
+<div class="col-xs-12">
+    <div class="single-product">
+        <div class="product-img">
+            <a class="" href="{{ product.get_absolute_url }}"style="display:flex; align-items:center; justify-content:center; max-width:181px!important; max-height: 181px!important; aspect-ratio: 1/1!important;">
+                <img class="primary-img" src="{{ product.get_first_image }}" alt="{{product.title}}" style="max-width:171px!important; max-height: 171px!important; aspect-ratio: 1/1!important; object-fit:contain!important; padding:10px;">
+            </a>
+        </div>
+        <div class="product-description">
+            <h5><a href="#">{{ product.title|truncatechars:20 }}</a></h5>
+            <div class="price-box">
+                <span class="price">${{product.get_price|intcomma }}</span>
+            </div>
+        </div>
+    </div>
+</div>

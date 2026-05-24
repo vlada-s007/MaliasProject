@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<!-- START PAGE-CONTENT -->
+<section class="page-content">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                {% include 'maliasStore/components/_page_menu.html' %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <!-- CATEGORY-MENU-LIST START -->
+                {% include 'maliasStore/components/_category_menu.html' %}
+                <!-- END CATEGORY-MENU-LIST -->
+            </div>
+            <div class="col-md-9">
+                <!-- START PRODUCT-BANNER -->
+                {% include 'maliasStore/components/_product_banner.html' %}
+                <!-- END PRODUCT-BANNER -->
+                <div class="Wishlist-area">
+                    <h2>My Wishlist</h2>
+                    {% if favs %}
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover">
+                            <thead>
+                            <tr>
+                                <td class="text-center">Image</td>
+                                <td class="text-left">Name</td>
+                                <td class="text-left">Model</td>
+                                <td class="text-left">Version</td>
+                                <td class="text-center">In Stock?</td>
+                                <td class="text-right">Unit Price</td>
+
+                                <td class="text-right">Action</td>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for fav in favs %}
+                            <tr>
+                                <td class="text-center">
+                                    <a href="#"><img src="{{fav.product.get_first_image}}"
+                                                     style="max-height:47px; max-width: 47px;" alt="#"/></a>
+                                </td>
+                                <td class="text-left" style="max-width: 201px;">
+                                    <a href="{{fav.product.get_absolute_url}}"
+                                       style="max-width: 201px;">{{fav.product}}</a>
+                                </td>
+                                <td class="text-left" style="max-width: 115px;">{{fav.product.model}}</td>
+                                <td class="text-left" style="max-width: 115px;">{{fav.product.version.title}}</td>
+                                <td class="text-center">{% if fav.product.quantity > 0 %}✓{% else %}✗{% endif %}</td>
+                                <td class="text-right">
+                                    <div class="price-box">
+                                        <span class="price">${{fav.product.get_price}}</span>
+                                    </div>
+                                </td>
+
+                                    <td class="text-center">
+<form action="{% url 'action_cart' fav.product.pk 'add' %}" style="width: 40px;!important; height: 30px!important;"method="post">
+                                            {% csrf_token %}
+                                        <button class="action_cart btn btn-primary" data-toggle="tooltip"
+                                                title="Add to Cart"
+                                                type="submit">
+                                            <i class="fa fa-shopping-cart"></i>
+                                        </button>
+                                </form>
+                                        <a href="{% url 'action_wishlist' fav.product.pk %}" style="margin-top: 10px;" class="btn btn-danger"
+                                           data-toggle="tooltip" title="Remove">
+                                            <i class="fa fa-times"></i>
+                                        </a>
+                                    </td>
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <hr>
+                    <h3>No Products yet!</h3>
+                    {% endif%}
+                    <div class="buttons clearfix pull-right">
+                        <a href="{% url 'cart' %}" class="btn btn-primary">Cart</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- START BRAND-LOGO-AREA -->
+    <!-- END BRAND-LOGO-AREA -->
+    <!-- START SUBSCRIBE-AREA -->
+
+    <!-- END SUBSCRIBE-AREA -->
+</section>
+<!-- END PAGE-CONTENT -->
+<!-- FOOTER-AREA START -->
+{% endblock content %}
+
+
+
+

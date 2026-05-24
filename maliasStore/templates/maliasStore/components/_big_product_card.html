@@ -1,0 +1,35 @@
+{% load humanize %}
+<div class="single-product">
+    <div class="col-md-3 col-sm-4 col-xs-12">
+        {% if product.new_status%}
+        <div class="label_new">
+            <span class="new">new</span>
+        </div>
+        {% endif %}
+        {% if product.discount %}
+        <div class="sale-off">
+            <span class="sale-percent">-{{product.discount}}%</span>
+        </div>
+        {% endif %}
+        <div class="product-img">
+            <a href="{{product.get_absolute_url}}" style="display:flex; align-items:center; justify-content:center; max-width:181px!important; max-height: 181px!important; aspect-ratio: 1/1!important;">
+                <img class="primary-img" src="{{product.get_first_image}}" alt="Product" style="max-width:181px!important; max-height: 181px!important; aspect-ratio: 1/1!important; object-fit:contain!important; padding:5px;">
+                <img class="secondary-img" src="{{product.get_last_image}}" alt="Product" style="max-width:181px!important; max-height: 181px!important; aspect-ratio: 1/1!important; object-fit:contain!important; padding:5px;">
+            </a>
+        </div>
+    </div>
+    <div class="col-md-9 col-sm-8 col-xs-12">
+        <div class="product-description">
+            <h5><a href="{{product.get_absolute_url}}">{{product.title}}</a></h5>
+            <div class="price-box">
+                <span class="price">${{product.get_price|intcomma}}</span>
+                {% if product.discount %}
+                <span class="old-price">${{product.price|intcomma}}</span>
+                {% endif %}
+            </div>
+{% include 'maliasStore/components/_rating.html' %}
+            <p class="description">{{product.description|truncatechars:200}}</p>
+            {% include 'maliasStore/components/_product_buttons.html' %}
+        </div>
+    </div>
+</div>

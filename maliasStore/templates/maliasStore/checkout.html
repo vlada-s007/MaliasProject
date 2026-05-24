@@ -1,0 +1,403 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load humanize %}
+{% load malias_tags %}
+
+<!-- START PAGE-CONTENT -->
+<section class="page-content">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                {% include 'maliasStore/components/_page_menu.html' %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <!-- CATEGORY-MENU-LIST START -->
+                {% include 'maliasStore/components/_category_menu.html' %}
+                <!-- END CATEGORY-MENU-LIST -->
+                <!-- START SMALL-PRODUCT-AREA -->
+                {% include 'maliasStore/components/_sidebar_bestsellers.html' %}
+                <!-- END SMALL-PRODUCT-AREA -->
+            </div>
+
+            <div class="col-md-9">
+                <!-- START PRODUCT-BANNER -->
+                {% include 'maliasStore/components/_product_banner.html' %}
+
+                <!-- END PRODUCT-BANNER -->
+                <!-- Start checkout-area -->
+                <div class="checkout-area">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="cart-title">
+                                <h2 class="entry-title">Checkout</h2>
+                            </div>
+                            <!-- Accordion start -->
+                            <div class="panel-group" id="accordion">
+                                <!-- Start 1 Checkout-options -->
+                                <!-- End Checkout-options -->
+                                <!-- Start 2 Payment-Address -->
+                                <div class="panel panel_default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a class="accordion-trigger  collapsed" data-toggle="collapse"
+                                               data-parent="#accordion" href="#payment-address">
+                                                Step 1: Account & Billing Details
+                                                <i class="fa fa-caret-down"></i> </a>
+                                        </h4>
+                                    </div>
+                                    <form action="{% url 'change_account' %}" method="POST">
+                                        <div id="payment-address" class="collapse">
+                                            {% csrf_token %}
+                                            <div class="panel-body">
+                                                <div class="row">
+                                                    <div class="col-md-6 col-xs-12">
+                                                        <fieldset id="account">
+                                                            <legend>Your Personal Details</legend>
+                                                            <div class="form-group">
+                                                                <label><sup>*</sup>First Name</label>
+                                                                {{user_form.first_name}}
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label><sup>*</sup>Last Name</label>
+                                                                {{user_form.last_name}}
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label><sup>*</sup>E-mail</label>
+                                                                {{user_form.username}}
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label><sup>*</sup>Phone</label>
+                                                                {{customer_form.phone}}
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label>Fax</label>
+                                                                {{customer_form.fax}}
+                                                            </div>
+                                                        </fieldset>
+                                                        <fieldset>
+                                                            <legend>Additional information</legend>
+                                                            {{customer_form.note}}
+                                                        </fieldset>
+
+                                                    </div>
+                                                    <div class="col-md-6 col-xs-12">
+                                                        <fieldset id="address">
+                                                            <legend>Your Address</legend>
+                                                            <div class="form-group">
+                                                                <div class="form-group">
+                                                                    <label><sup>*</sup>Region</label>
+                                                                    {{customer_form.region}}
+
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label><sup>*</sup>City</label>
+                                                                    {{customer_form.city}}
+                                                                </div>
+
+                                                                <div class="form-group">
+                                                                    <label><sup>*</sup>Postal Code</label>
+                                                                    {{customer_form.postal_code}}
+                                                                </div>
+
+                                                                <div class="form-group">
+                                                                    <label><sup>*</sup>Postal Code</label>
+                                                                    {{customer_form.phone}}
+                                                                </div>
+
+                                                                <div class="form-group">
+                                                                    <label>Street</label>
+                                                                    {{customer_form.street}}
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label>Company</label>
+                                                                    {{customer_form.company}}
+
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label>Home</label>
+                                                                    {{customer_form.home}}
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label>Flat</label>
+                                                                    {{customer_form.flat}}
+                                                                </div>
+                                                            </div>
+                                                        </fieldset>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-xs-12">
+                                                        <div class="checkbox">
+                                                            <label>
+                                                                {{ customer_form.newsletter }}
+                                                                I wish to subscribe to the Malias1 newsletter.
+                                                            </label>
+                                                        </div>
+                                                        <div class="checkbox">
+                                                            <label>
+                                                                <input type="checkbox" name="customer_delivery"
+                                                                       checked/>
+                                                                My delivery and billing addresses are the same.
+                                                            </label>
+                                                        </div>
+                                                        <div class="buttons clearfix">
+                                                            <div class="pull-right">
+                                                                I have read and agree to the
+                                                                <a href="#"><b>Privacy Policy</b></a>
+                                                                <input type="checkbox" name="agree"/>
+                                                                <button type="submit" class="btn btn-primary">Continue
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <!-- End Payment-Address -->
+                                <!-- Start 3 shipping-Address -->
+                                <form action="{% url 'payment' %}" method="post">
+                                    {% csrf_token %}
+                                <div class="panel panel_default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a class="accordion-trigger collapsed" data-toggle="collapse"
+                                               data-parent="#accordion" href="#shipping-address">Step 2: Delivery
+                                                Details <i class="fa fa-caret-down"></i> </a>
+                                        </h4>
+                                    </div>
+                                    <div id="shipping-address" class="collapse">
+                                        <div class="panel-body">
+                                            <div class="form-horizontal">
+                                                <div class="form-group">
+                                                    <label class="col-sm-2 control-label"><sup>*</sup>Region</label>
+                                                    <div class="col-sm-10">
+                                                        {{form.region}}
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label class="col-sm-2 control-label"><sup>*</sup>City</label>
+                                                    <div class="col-sm-10">
+                                                        {{form.city}}
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label class="col-sm-2 control-label">Postal Code</label>
+                                                    <div class="col-sm-10">
+                                                        {{form.postal_code}}
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label class="col-sm-2 control-label">Street</label>
+                                                    <div class="col-sm-10">
+                                                        {{form.street}}
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label class="col-sm-2 control-label">Company</label>
+                                                    <div class="col-sm-10">
+                                                        {{form.company}}
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="form-group">
+                                                    <label class="col-sm-2 control-label"><sup>*</sup>Home</label>
+                                                    <div class="col-sm-10">
+                                                        {{form.home}}
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label class="col-sm-2 control-label">Flat</label>
+                                                    <div class="col-sm-10">
+                                                        {{form.flat}}
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label class="col-sm-2 control-label"><sup>*</sup>Phone</label>
+                                                    <div class="col-sm-10">
+                                                        {{form.phone}}
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="form-group">
+                                                    <label class="col-sm-2 control-label">Fax</label>
+                                                    <div class="col-sm-10">
+                                                        {{form.fax}}
+
+                                                    </div>
+                                                </div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- End shipping-Address -->
+                                <!-- Start 4 shipping-Method -->
+                                <div class="panel panel_default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a class="accordion-trigger collapsed" data-toggle="collapse"
+                                               data-parent="#accordion" href="#shipping-method">Step 3: Delivery Method
+                                                <i class="fa fa-caret-down"></i> </a>
+                                        </h4>
+                                    </div>
+                                    <div id="shipping-method" class="collapse">
+                                        <div class="panel-body">
+                                            <p>Please select the preferred shipping method to use on this order.</p>
+                                                    {% cart_info request as cart %}
+                                            <div class="radio">
+                                                    {% if cart.cart_price > 500 %}
+                                                <h6>
+                                                    Free door-to-door delivery for orders over $500.0
+                                                </h6>
+                                                {% else %}
+                                                {% endif %}
+
+
+                                                {% for choice in form.door_to_door %}
+                                                    {{choice}}
+                                                    {% endfor %}
+
+
+                                            </div>
+                                            <p><strong>Add Comments About Your Order</strong></p>
+                                            <p>
+                                                {{form.comment_delivery}}
+                                            </p>
+                                            <div class="buttons pull-right">
+                                                <a type="button" data-toggle="collapse" data-parent="#accordion" href="#payment-method"
+                                                   class="accordion-trigger btn btn-primary" data-bs-target="#payment_method" aria-expanded="true">Continue</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- End shipping-Method -->
+                                <!-- Start 5 Payment-Method -->
+                                <div class="panel panel_default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a class="accordion-trigger collapsed" data-toggle="collapse"
+                                               data-parent="#accordion" href="#payment-method">Step 4: Payment Method <i
+                                                    class="fa fa-caret-down"></i> </a>
+                                        </h4>
+                                    </div>
+                                    <div id="payment-method" class="collapse">
+                                        <div class="panel-body">
+                                            <p>Please select the preferred payment method to use on this order.</p>
+                                            <div class="radio">
+                                                    {% for choice in form.online_payment %}
+                                                    {{choice}}
+                                                    {% endfor %}
+
+                                            </div>
+                                            <p><strong>Add Comments About Your Order</strong></p>
+                                            <p>
+                                                {{form.comment_payment}}
+
+                                            </p>
+                                            <div class="buttons pull-right">
+                                                I have read and agree to the
+                                                <a href="#"><b>Terms & Conditions</b></a>
+                                                <input type="checkbox" name="agree"/>
+                                                <a type="button" class="accordion-trigger btn btn-primary"data-toggle="collapse" data-parent="#accordion" href="#checkout-confirm" aria-expanded="true">Continue</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- End Payment-Method -->
+                                <!-- Start 6 Checkout-Confirm -->
+                                <div class="panel panel_default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a class="accordion-trigger collapsed" data-toggle="collapse"
+                                               data-parent="#accordion" href="#checkout-confirm">Step 5: Confirm Order
+                                                <i class="fa fa-caret-down"></i> </a>
+                                        </h4>
+                                    </div>
+                                    <div id="checkout-confirm" class="collapse">
+                                        <div class="panel-body">
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered">
+                                                    <thead>
+                                                    <tr>
+                                                        <td class="text-center">Image</td>
+                                                        <td class="text-left">Name</td>
+                                                        <td class="text-left">Model</td>
+                                                        <td class="text-left">Version</td>
+                                                        <td class="text-left">Quantity</td>
+                                                        <td class="text-right">Unit Price</td>
+                                                        <td class="text-right">Total</td>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    {% for item in items %}
+                                                    <tr>
+                                                        <td class="text-center">
+                                                            <a href="{{item.product.get_absolute_url}}"
+                                                               style="aspect-ratio: 4/5; max-width: 80px; max-height: 100px;"><img
+                                                                    class="img-thumbnail"
+                                                                    src="{{item.product.get_first_image}}"
+                                                                    style="max-width: 80px; max-height: 100px; object-fit:cover;"
+                                                                    alt="#"/></a>
+                                                        </td>
+                                                        <td class="text-left">
+                                                            <a href="{{item.product.get_absolute_url}}">{{item.product.title}}</a>
+                                                        </td>
+                                                        <td class="text-right">{{item.product.model}}</td>
+                                                        <td class="text-left">{{item.product.version.title}}</td>
+                                                        <td class="text-right">
+                                                            {{item.quantity}}
+                                                        </td>
+                                                        <td class="text-right">${{item.product.get_price|intcomma}}</td>
+
+                                                        <td class="text-right">${{item.get_total_price|intcomma}}
+                                                            {% if item.gift is True %}
+
+                                                            <small> + 20$ for gift wrapping </small>
+                                                            {% endif %}
+                                                        </td>
+
+                                                    </tr>
+                                                    {% endfor %}
+                                                    </tbody>
+
+                                                </table>
+                                            </div>
+
+                                            <div class="buttons pull-right">
+                                                <button type="submit" class="btn btn-primary">Confirm Order</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- End Checkout-Confirm -->
+                                </form>
+
+                            </div>
+                            <!-- Accordion end -->
+                        </div>
+                    </div>
+                </div>
+                <!-- End Shopping-Cart -->
+            </div>
+
+        </div>
+    </div>
+</section>
+<!-- END PAGE-CONTENT -->
+
+{% endblock content %}

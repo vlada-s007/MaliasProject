@@ -1,0 +1,352 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+{% load malias_tags %}
+{% load humanize %}
+
+<!-- START PAGE-CONTENT -->
+<section class="page-content">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                {% include 'maliasStore/components/_page_menu.html' %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <!-- CATEGORY-MENU-LIST START -->
+                {% include 'maliasStore/components/_category_menu.html' %}
+                <!-- END CATEGORY-MENU-LIST -->
+
+                <!-- START SMALL-PRODUCT-AREA -->
+                {% include 'maliasStore/components/_sidebar_bestsellers.html' %}
+                <!-- END SMALL-PRODUCT-AREA -->
+            </div>
+
+            <div class="col-md-9">
+                <!-- START PRODUCT-BANNER -->
+                {% include 'maliasStore/components/_product_banner.html' %}
+                <!-- END PRODUCT-BANNER -->
+                <!-- Start Shopping-Cart -->
+                {% if items %}
+                <div class="shopping-cart">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="cart-title">
+                                <h2 class="entry-title">Shopping Cart</h2>
+                            </div>
+                            <!-- Start Table -->
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead>
+                                    <tr>
+                                        <td class="text-center">Image</td>
+                                        <td class="text-left">Name</td>
+                                        <td class="text-left">Model</td>
+                                        <td class="text-left">Version</td>
+                                        <td class="text-left">Quantity</td>
+                                        <td class="text-right">Unit Price</td>
+                                        <td class="text-right">Total</td>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for item in items %}
+                                    <tr>
+                                        <td class="text-center">
+                                            <a href="{{item.product.get_absolute_url}}"
+                                               style="aspect-ratio: 4/5; max-width: 80px; max-height: 100px;"><img
+                                                    class="img-thumbnail" src="{{item.product.get_first_image}}"
+                                                    style="max-width: 80px; max-height: 100px; object-fit:cover;"
+                                                    alt="#"/></a>
+                                        </td>
+                                        <td class="text-left">
+                                            <a href="{{item.product.get_absolute_url}}">{{item.product.title}}</a>
+                                        </td>
+                                        <td class="text-right">{{item.product.model}}</td>
+                                        <td class="text-left">{{item.product.version.title}}</td>
+                                        <td class="text-left">
+                                            <div class="btn-block cart-put">
+                                                <form method="post">
+                                                    {% csrf_token %}
+                                                    <input class="form-control" type="number" name="quantity"
+                                                           placeholder="{{item.quantity}}"/>
+                                                    <div class="input-group-btn cart-buttons">
+                                                        <button class="btn btn-primary" type="submit"
+                                                                data-toggle="tooltip" title="Update"
+                                                                formaction="{% url 'action_cart' item.product.pk 'alter' %}">
+                                                            <i class="fa fa-refresh"></i>
+                                                        </button>
+
+                                                        <button type="submit" class="btn btn-danger"
+                                                                formaction="{% url 'action_cart' item.product.pk 'clear' %}"
+                                                                data-toggle="tooltip" title="Remove">
+                                                            <i class="fa fa-times-circle"></i>
+                                                        </button>
+                                                    </div>
+                                                </form>
+
+
+                                            </div>
+                                        </td>
+                                        <td class="text-right">${{item.product.get_price|intcomma}}
+
+                                            <form action="" method="post">
+                                                {% csrf_token %}
+                                                <button class="btn btn-primary" data-toggle="tooltip" type="submit"
+                                                        name="gift-cart"
+                                                        formaction="{% url 'action_cart' item.product.pk 'gift'%}"
+                                                        title="Include/Remove Gift Wrapping">
+                                                    <i class="fa fa-refresh"></i></button>
+                                            </form>
+                                        </td>
+
+                                        <td class="text-right">${{item.get_total_price|intcomma}}
+                                            {% if item.gift is True %}
+
+                                            <small> (20$ gift wrapping fee) </small>
+                                            {% endif %}
+                                        </td>
+
+                                    </tr>
+                                    {% endfor %}
+                                    </tbody>
+
+                                </table>
+                            </div>
+                            <!-- End Table -->
+                            <h3 class="title-group-3 gfont-1">What would you like to do next?</h3>
+                            <p>Choose if you have a discount code or reward points you want to use or would like to
+                                estimate your delivery cost.</p>
+                            <!-- Accordion start -->
+                            <div class="accordion-cart">
+                                <div class="panel-group" id="accordion">
+                                    <!-- Start Coupon -->
+                                    <div class="accordion-cart">
+                                        <div class="panel-group" id="accordion">
+                                            <!-- Start Coupon -->
+                                            {% if cart.coupon_discount == 0 %}
+                                            <div class="panel panel_default">
+                                                <div class="panel-heading">
+                                                    <h4 class="panel-title">
+                                                        <a class="accordion-trigger" data-toggle="collapse"
+                                                           data-parent="#accordion" href="#coupon">Use Coupon Code<i
+                                                                class="fa fa-caret-down"></i> </a>
+                                                    </h4>
+                                                </div>
+                                                <div id="coupon" class="collapse in">
+                                                    <div class="panel-body">
+                                                        <div class="col-sm-2">
+                                                            <p>Enter your coupon here</p>
+                                                        </div>
+                                                        <form action="{% url 'alter_cart' action='coupon_discount' %}"
+                                                              method="POST">
+                                                            <div class="input-group">
+                                                                {% csrf_token %}
+                                                                <input class="form-control" type="text" name="coupon"
+                                                                       placeholder="Enter your coupon here"/>
+                                                                <button type="submit" class="btn btn-primary">Apply
+                                                                    Coupon
+                                                                </button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {% endif %}
+                                            <!-- End Coupon -->
+
+                                            {% if cart.voucher == 0 %}
+                                            <!-- Start Voucher -->
+                                            <div class="panel panel_default">
+                                                <div class="panel-heading">
+                                                    <h4 class="panel-title">
+                                                        <a class="accordion-trigger collapsed" data-toggle="collapse"
+                                                           data-parent="#accordion" href="#voucher">Use Gift Voucher <i
+                                                                class="fa fa-caret-down"></i> </a>
+                                                    </h4>
+                                                </div>
+                                                <div id="voucher" class="collapse">
+                                                    <div class="panel-body">
+                                                        <div class="col-sm-2">
+                                                            <p>Enter your gift voucher code here</p>
+                                                        </div>
+                                                        <form action="{% url 'alter_cart' action='voucher' %}"
+                                                              method="POST">
+
+                                                            <div class="input-group">
+                                                                {% csrf_token %}
+                                                                <input class="form-control" type="text" name="voucher"
+                                                                       placeholder="Enter your gift voucher code here"/>
+                                                                <button type="submit" class="btn btn-primary">Apply
+                                                                    Voucher
+                                                                </button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- End Voucher -->
+                                            {% endif %}
+
+
+                                            <div class="panel panel_default">
+                                                <div class="panel-heading">
+                                                    <h4 class="panel-title">
+                                                        <a class="accordion-trigger collapsed" data-toggle="collapse"
+                                                           data-parent="#accordion" href="#shipping">Estimate The Cost
+                                                            Of Delivery
+                                                            <i class="fa fa-caret-down"></i> </a>
+                                                    </h4>
+                                                </div>
+                                                <div id="shipping" class="collapse">
+                                                    <div class="panel-body">
+                                                        <div class="col-sm-12">
+                                                            {% if cart_price > 500 %}
+                                                            <small>* Your order is over 500$. Enjoy your free
+                                                                delivery!</small>
+                                                            {% endif %}
+                                                            {% if not cart.delivery_est %}
+                                                            <p>Enter your destination to get a shipping estimate. Any
+                                                                order over 500$ guarantees free delivery.</p>
+                                                            {% else %}
+                                                            <p>Estimated delivery cost: {{cart.delivery_est|intcomma}}
+                                                                $.</p>
+                                                            <p> Want to calculate again?</p>
+                                                            {% endif %}
+
+                                                        </div>
+                                                        <form action="{% url 'estimate_delivery' %}" method="post">
+                                                            {% csrf_token %}
+                                                            <div class="form-horizontal">
+                                                                <div class="form-group">
+                                                                    <label class="col-sm-2 control-label"><sup>*</sup>Region</label>
+                                                                    <div class="col-sm-10">
+                                                                        <select class="form-control" id="id_region"
+                                                                                name="region">
+                                                                            <option> --- Please Select ---</option>
+
+                                                                            {% for region in regions %}
+                                                                            <option value="{{region.pk}}">
+                                                                                {{region.name}}
+                                                                            </option>
+                                                                            {% endfor %}
+
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label class="col-sm-2 control-label"><sup>*</sup>City</label>
+                                                                    <div class="col-sm-10">
+                                                                        <select class="form-control" id="id_city"
+                                                                                name="city">
+                                                                            <option> --- Please Select ---</option>
+
+                                                                            {% for city in dict_cities %}
+                                                                            {% for pk, title in city %}
+                                                                            <option value="{{pk}}"> {{title}}</option>
+                                                                            {% endfor %}
+                                                                            {% endfor %}
+
+                                                                        </select>
+                                                                        <button type="submit" class="btn btn-primary">
+                                                                            Estimate
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </form>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                    <!-- Accordion end -->
+                                    <div class="row">
+                                        <div class="col-sm-4 col-sm-offset-8">
+                                            <table class="table table-bordered">
+                                                <tbody>
+                                                <tr>
+                                                    <td class="text-right">
+                                                        <strong>Sub-Total:</strong>
+                                                    </td>
+                                                    <td class="text-right">${{cart.subtotal_cart_price|intcomma}}</td>
+                                                </tr>
+                                                {% if cart.voucher %}
+                                                <tr>
+                                                    <td class="text-right">
+                                                        <strong>Voucher:</strong>
+                                                    </td>
+                                                    <td class="text-right">-${{cart.voucher|intcomma}}</td>
+                                                </tr>
+                                                {% endif %}
+                                                {% if cart.coupon_discount %}
+                                                <tr>
+                                                    <td class="text-right">
+                                                        <strong>Coupon Discount:</strong>
+                                                    </td>
+                                                    <td class="text-right">-{{cart.coupon_discount}}%</td>
+                                                </tr>
+                                                {% endif %}
+
+                                                {% if cart.delivery_est %}
+                                                <tr>
+                                                    <td class="text-right">
+                                                        <strong>Estimated Delivery Cost:</strong>
+                                                    </td>
+                                                    <td class="text-right">+${{cart.delivery_est}}</td>
+                                                </tr>
+                                                {% endif %}
+                                                <tr>
+                                                    <td class="text-right">
+                                                        <strong>Total:</strong>
+                                                    </td>
+                                                    <td class="text-right">${{cart_price|intcomma}}</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="shopping-checkout">
+                                        <a href="{% url 'bestsellers' %}" class="btn btn-default pull-left">Continue
+                                            Shopping</a>
+                                        <a href="{% url 'checkout' %}" class="btn btn-primary pull-right">Checkout</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+                <div class="shopping-cart">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="cart-title">
+                                <a href="{% url 'wishlist' %}"><h2 class="entry-title">Shopping Cart</h2></a>
+                            </div>
+                             <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead>
+                                    <tr>
+                                        <td class="text-center"><a href="{% url 'wishlist' %}">Shopping Cart is empty. Go to Wishlist to add items? </a></td>
+                                    </tr>
+                                    </thead>
+                                </table>
+                             </div>
+                        </div>
+                    </div>
+                </div>
+
+                {% endif %}
+                <!-- End Shopping-Cart -->
+            </div>
+
+        </div>
+
+    </div>
+</section>
+{% endblock content %}

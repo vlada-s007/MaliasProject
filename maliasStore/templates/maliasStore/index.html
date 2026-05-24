@@ -1,0 +1,255 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+{% load humanize %}
+{% load malias_tags %}
+<!-- Category slider area start -->
+<div class="category-slider-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3">
+                <!-- CATEGORY-MENU-LIST START -->
+                {% include 'maliasStore/components/_category_menu.html' %}
+
+                <!-- END CATEGORY-MENU-LIST -->
+            </div>
+            <div class="col-md-9">
+                <!-- slider -->
+                {% include 'maliasStore/components/_sliders.html' %}
+
+                <!-- slider end-->
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<section class="page-content">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3 col-sm-3">
+                <!-- START HOT-DEALS-AREA -->
+                {% include 'maliasStore/components/_sidebar_hot_deals.html'%}
+                <!-- END HOT-DEALS-AREA -->
+
+                <!-- START SMALL-PRODUCT-AREA -->
+                {% include 'maliasStore/components/_sidebar_bestsellers.html' %}
+                <!-- END SMALL-PRODUCT-AREA -->
+
+                <!-- START SIDEBAR-BANNER -->
+                {% include 'maliasStore/components/_sidebar_banner.html' %}
+                <!-- END SIDEBAR-BANNER -->
+
+                <!-- START RECENT-POSTS -->
+                {% include 'maliasStore/components/_sidebar_posts.html' %}
+                <!-- END RECENT-POSTS -->
+
+            </div>
+            <div class="col-md-9 col-sm-9">
+                <!-- START PRODUCT-BANNER -->
+                <div class="product-banner home1-banner">
+                    <div class="row">
+                        <div class="col-md-7 banner-box1">
+                            <div class="single-product-banner">
+                                <a href="{% url 'category' slug='wired-headphones-earbuds'%}"><img
+                                        src="{% static 'img/banner/3.jpg' %}" alt="Product Banner"></a>
+                                <div class="banner-text banner-1">
+                                    <h2>New Headphones</h2>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-5 banner-box2">
+                            <div class="single-product-banner">
+                                <a href="{% url 'product' slug='htc-one-m7-with-boomsound-stereo-speakers-aluminiu' %}"><img
+                                        src="{% static 'img/banner/4.jpg' %}" alt="Product Banner"></a>
+                                <div class="banner-text banner-2">
+                                    <h2>HTC One M7</h2>
+                                    <p>$100</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END PRODUCT-BANNER -->
+                <!-- START PRODUCT-AREA (1) -->
+                {% main_categories as cats %}
+                {% for cat in cats|slice:"4:7" %}
+                <div class="product-area">
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                            <!-- Start Product-Menu -->
+                            <!-- Start Product-Menu -->
+                            <div class="product-menu">
+                                <div class="product-title">
+                                    <h3 class="title-group-2 gfont-1">{{cat.title}}</h3>
+                                </div>
+
+                                <ul role="tablist">
+                                    {% for subcat in cat.subcategories.all|slice:":1" %}
+                                    {% for subsubcat in subcat.subcategories.all|slice:":1" %}
+                                    <li role="presentation" class=" active"><a href="#display-1-{{subsubcat.pk}}"
+                                                                               role="tab"
+                                                                               data-toggle="tab">
+                                        {{ subsubcat.title}}</a></li>
+                                    {% endfor %}
+                                    {% endfor %}
+
+                                    {% for subcat in cat.subcategories.all|slice:"1:"|slice:":2" %}
+                                    {% for subsubcat in subcat.subcategories.all|slice:"1:"|slice:":2" %}
+
+                                    <li role="presentation" class=""><a href="#display-1-{{subsubcat.pk}}" role="tab"
+                                                                        data-toggle="tab">
+                                        {{ subsubcat.title}}</a></li>
+                                    {% endfor %}
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End Product-Menu -->
+                    <div class="clear"></div>
+                    <!-- Start Product -->
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                            <div class="product carosel-navigation">
+                                <div class="tab-content">
+                                    <!-- Product = display-1-1 -->
+                                    {% for subcat in cat.subcategories.all|slice:":1" %}
+                                    {% for subsubcat in subcat.subcategories.all|slice:":1" %}
+                                    <div role="tabpanel" class="tab-pane fade in active"
+                                         id="display-1-{{subsubcat.pk}}">
+                                        <div class="row">
+                                            <div class="active-product-carosel">
+
+                                                {% for product in subsubcat.products.all %}
+                                                <!-- Start Single-Product -->
+                                                {% include 'maliasStore/components/_product_card.html' %}
+
+                                                <!-- End Single-Product -->
+                                                {% endfor %}
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                    {% endfor %}
+
+                                    {% for subcat in cat.subcategories.all|slice:"1:"|slice:":2" %}
+                                    {% for subsubcat in subcat.subcategories.all|slice:"1:"|slice:":2" %}
+                                    <div role="tabpanel" class="tab-pane fade in" id="display-1-{{subsubcat.pk}}">
+                                        <div class="row">
+                                            <div class="active-product-carosel">
+
+                                                {% for product in subsubcat.products.all %}
+                                                <!-- Start Single-Product -->
+                                                {% include 'maliasStore/components/_product_card.html' %}
+                                                <!-- End Single-Product -->
+                                                {% endfor %}
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                    {% endfor %}
+                                    <!-- End Product = display-1-1 -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End Product -->
+                </div>
+                {% endfor %}
+                <!-- END PRODUCT-AREA (1) -->
+
+                <!-- START PRODUCT-BANNER -->
+                <div class="product-banner">
+                    <div class="row">
+                        <div class="col-md-7 banner-box1">
+                            <div class="single-product-banner">
+                                <a href="#"><img src="{% static 'img/banner/5.jpg' %}" alt="Product Banner"></a>
+                                <div class="banner-text banner-1">
+                                    <h2>ApBle 4s</h2>
+                                    <p>Vibrant colors. Beautifully designed</p>
+                                    <span>$888.66</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-5 banner-box2">
+                            <div class="single-product-banner">
+                                <a href="{% url 'product' slug='htc-one-m7-with-boomsound-stereo-speakers-aluminiu' %}"><img
+                                        src="{% static 'img/banner/6.jpg' %}" alt="Product Banner"></a>
+                                <div class="banner-text banner-2">
+                                    <h2>HTC <span>ONE.</span></h2>
+                                    <p>lumina n85</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END PRODUCT-BANNER -->
+
+                <!-- START SMALL-PRODUCT-AREA (1) -->
+                {% include 'maliasStore/components/_small_product_area.html' %}
+                <!-- END SMALL-PRODUCT-AREA (1) -->
+            </div>
+        </div>
+    </div>
+
+</section>
+
+{% endblock content %}
+
+
+{% block modal %}
+
+{% main_categories as cats %}
+    {% for cat in cats|slice:"4:7" %}
+        {% for subcat in cat.subcategories.all|slice:":1" %}
+            {% for subsubcat in subcat.subcategories.all|slice:":1" %}
+                {% for product in subsubcat.products.all %}
+                    {% include 'maliasStore/components/_modal_quickview.html' %}
+                {% endfor %}
+            {% endfor %}
+        {% for subcat in cat.subcategories.all|slice:"1:"|slice:":2" %}
+            {% for subsubcat in subcat.subcategories.all|slice:"1:"|slice:":2" %}
+                    {% for product in subsubcat.products.all %}
+                        {% include 'maliasStore/components/_modal_quickview.html' %}
+                    {% endfor %}
+        {% for subcat in cat.subcategories.all|slice:":1" %}
+            {% for subsubcat in subcat.subcategories.all|slice:":1" %}
+                {% for product in subsubcat.products.all %}
+                    {% include 'maliasStore/components/_modal_quickview.html' %}
+                {% endfor %}
+            {% endfor %}
+        {% endfor %}
+
+        {% for subcat in cat.subcategories.all|slice:"1:"|slice:":2" %}
+            {% for subsubcat in subcat.subcategories.all|slice:"1:"|slice:":2" %}
+                {% for product in subsubcat.products.all %}
+                    {% include 'maliasStore/components/_modal_quickview.html' %}
+                                                <!-- End Single-Product -->
+                                                {% endfor %}
+
+                                    {% endfor %}
+                                    {% endfor %}
+
+                                    {% endfor %}
+                                    {% endfor %}
+        {% endfor %}
+    {% endfor %}
+
+{% endblock modal %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

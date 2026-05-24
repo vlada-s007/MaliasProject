@@ -1,0 +1,106 @@
+{% load malias_tags %}
+<div class="left-category-menu hidden-sm hidden-xs">
+                    <div class="left-product-cat">
+                        <div class="category-heading">
+                            <h2>Categories</h2>
+                        </div>
+                        <div class="category-menu-list">
+                            {% main_categories as cats %}
+                            <ul>
+                                <!-- Single menu start -->
+                                {% for cat in cats|slice:":7" %}
+                                {% if cat.subcategories.all %}
+                                <li class="arrow-plus">
+                                    <a href="{% url 'category' cat.slug %}">{{ cat.title }}</a>
+                                    <!--  MEGA MENU START -->
+                                    <div class="cat-left-drop-menu">
+                                    {% for subcat in cat.subcategories.all %}
+                                        <div class="cat-left-drop-menu-left">
+                                            {% if subcat.subcategories.all %}
+                                            <a class="menu-item-heading" href="{% url 'category' subcat.slug %}">{{subcat.title}}</a>
+
+                                                {% for subsubcat in subcat.subcategories.all %}
+                                            <ul>
+                                                <li><a href="{% url 'category' subsubcat.slug %}">{{ subsubcat.title }}</a></li>
+                                                {% endfor %}
+                                            </ul>
+
+
+                                            {% else %}
+                                            <ul>
+                                                <li><a href="#">{{ subcat.title }}</a></li>
+                                            </ul>
+                                            {% endif %}
+                                        </div>
+
+                                    {% endfor %}
+                                    </div>
+
+
+                                </li>
+                                <!-- MEGA MENU END -->
+
+                                {% else %}
+
+                                <!-- Single menu start -->
+                                <li>
+                                    <a href="shop.html">{{ cat.title }}</a>
+                                </li>
+                                {% endif %}
+                                {% endfor %}
+                                <!-- Single menu end -->
+
+                                <!-- MENU ACCORDION START -->
+                                {% for cat in cats|slice:"7:" %}
+                                {% if cat.subcategories.all %}
+                                <li class="arrow-plus rx-child">
+                                    <a href="shop.html">{{ cat.title }}</a>
+                                    <!--  MEGA MENU START -->
+                                    <div class="cat-left-drop-menu">
+                                    {% for subcat in cat.subcategories.all %}
+                                        <div class="cat-left-drop-menu-left">
+                                            {% if subcat.subcategories.all %}
+                                            <a class="menu-item-heading" href="{% url 'category' subcat.slug %}">{{subcat.title}}</a>
+                                                {% for subsubcat in subcat.subcategories.all %}
+                                            <ul>
+                                                <li><a href="{% url 'category' subsubcat.slug %}">{{ subsubcat.title }}</a></li>
+                                                {% endfor %}
+                                            </ul>
+
+
+                                            {% else %}
+                                            <ul>
+                                                <li><a href="#">{{ subcat.title }}</a></li>
+                                            </ul>
+                                            {% endif %}
+                                        </div>
+
+                                    {% endfor %}
+                                    </div>
+
+
+                                </li>
+                                <!-- MEGA MENU END -->
+
+                                {% else %}
+
+                                <!-- Single menu start -->
+                                <li class="rx-child">
+                                    <a href="shop.html">{{ cat.title }}</a>
+                                </li>
+                                {% endif %}
+                                {% endfor %}
+                                <li class=" rx-parent">
+                                    <a class="rx-default">
+                                        More categories <span class="cat-thumb  fa fa-plus"></span>
+                                    </a>
+                                    <a class="rx-show">
+                                        close menu <span class="cat-thumb  fa fa-minus"></span>
+                                    </a>
+                                </li>
+                                <!-- MENU ACCORDION END -->
+                            </ul>
+
+                        </div>
+                    </div>
+                </div>

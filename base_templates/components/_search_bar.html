@@ -1,0 +1,33 @@
+{% load malias_tags %}
+{% main_categories as cats %}
+
+<div class="search-by-category">
+    <div class="search-container">
+        <form action="{% url 'search' %}" method="get" role="search">
+        <form name="subcat" action="?{% query_params subcat=request.GET.subcat %}" method="GET">
+        <select name="subcat">
+            <option class="all-cate" value="">All Categories</option>
+            {% for cat in cats %}
+            <optgroup class="cate-item-head" label="{{cat.title}}">
+            {% if cat.subcategories.all %}
+            {% for subcat in cat.subcategories.all %}
+            {% if subcat.subcategories.all %}
+            {% for subsubcat in subcat.subcategories.all %}
+<option class="cate-item-title" name="subcat" value="{{subsubcat.slug}}">{{subsubcat.title}}</option>
+                {% endfor %}
+                {% endif %}
+                {% endfor %}
+                {% endif %}
+            </optgroup>
+            {% endfor %}
+        </select>
+
+    </div>
+    <div class="header-search">
+
+            <input type="text" placeholder="Search" name="q" value="{% if request.GET.q %}{{request.GET.q }}{% endif %}">
+            <button type="submit"><i class="fa fa-search"></i></button>
+</form>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,22 @@
+                {% load humanize %}
+                {% load malias_tags %}
+                {% in_cart request product.pk as in_cart %}
+
+<div class="single-product">
+    <div class="product-img">
+        <a href="{{product.get_absolute_url}}"  style="display:flex; align-items:center; justify-content:center; max-width:100px!important; max-height: 100px!important; aspect-ratio: 1/1!important;">
+            <img class="primary-img" src="{{product.get_first_image}}"
+                 style="aspect-ratio: 1/1!important; object-fit: contain !important; max-width:90px; max-height:90px; padding:5px;" alt="{{product.title}}">
+        </a>
+    </div>
+    <div class="product-description">
+        <h5 style="max-width:260px!important;"><a href="{{product.get_absolute_url}}">{{product.title|truncatechars:15}}</a></h5>
+        <div class="price-box">
+            <span class="price">${{ product.get_price|intcomma }}</span>
+            {% if product.discount %}
+            <span class="old-price">${{ product.price|intcomma }}</span>
+            {% endif %}
+        </div>
+{% include 'maliasStore/components/_rating.html' %}
+    </div>
+</div>

@@ -1,0 +1,39 @@
+{% load malias_tags %}
+{% in_cart request product.pk as in_cart %}
+
+<div class="product-action" style="
+{% if 'category' in request.path %}max-width: 188px!important; max-height: 110px!important;{%endif%}">
+                <div class="button-group">
+                    <div class="product-button">
+                        {% if not in_cart %}
+                        <form action="">
+                        {% csrf_token %}
+                        <button class="action_cart" formmethod="post" formaction="{% url 'action_cart' product.pk 'add'%}"><i class="action_cart fa fa-shopping-cart"></i> Add to Cart</button>
+                            </form>
+                        {% else %}
+                        <form action="{% url 'cart'%}">
+                        <button class="action_basket"><i class="action_cart fa fa-shopping-cart"></i> Go To Cart</button>
+</form>
+                        {% endif %}
+                    </div>
+                    <div class="product-button-2">
+                        {% get_wishlist request as favs %}
+                        <a role="button" href="{% url 'action_wishlist' product.pk %}"
+                           class="{% if product in favs %}active {% endif %} action_wishlist"
+                           style="{% if product in favs %}background: #26acce;{% endif %}"
+                           data-toggle="tooltip" title="{% if product in favs %}
+                                        Remove from
+                                        {% endif %}Wishlist"><i class="
+                                        {% if product in favs %}
+                                        fa fa-heart
+                                        {% else %}
+                                        fa fa-heart-o
+                                        {% endif %}
+"></i></a>
+                        <a href="{{product.model.get_absolute_url}}" data-toggle="tooltip" title="Compare"><i class="fa fa-signal"></i></a>
+                        <a href="#" class="modal-view" data-toggle="modal" data-target="#productModal{{product.pk}}"
+                           title="Quickview"><i class="fa fa-search-plus"></i></a>
+
+                    </div>
+                </div>
+            </div>

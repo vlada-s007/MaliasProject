@@ -1,0 +1,38 @@
+{% load malias_tags %}
+<div class="pagination-area">
+    <div class="row">
+        <div class="col-xs-5">
+            <div class="pagination">
+                <ul>
+
+                    {% if page_obj.has_previous %}
+                                        <li><a href="?{% query_params page=1 %}">|<</a></li>
+                    <li>
+                        <a href="?{% query_params page=page_obj.previous_page_number %}"><</a>
+                    </li>
+                    {% endif %}
+                    {% for page in page_obj.paginator.page_range %}
+                    {% if page == page_obj.number %}
+                    <li class="active">
+                        <a href="">{{page}}</a>
+                    </li>
+                    {% elif page > page_obj.number|add:-3 and page < page_obj.number|add:+3 %}
+                    <li>
+                        <a href="?{% query_params page=page %}">{{ page }}</a>
+                    </li>
+                    {% endif %}
+                    {% endfor %}
+                    {% if page_obj.has_next %}
+                    <li><a href="?{% query_params page=page_obj.next_page_number %}">></a></li>
+                    <li><a href="?{% query_params page=page_obj.paginator.num_pages %}">>|</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+        <div class="col-xs-7">
+            <div class="product-result">
+                <span>{{products.count}} items</span>
+            </div>
+        </div>
+    </div>
+</div>

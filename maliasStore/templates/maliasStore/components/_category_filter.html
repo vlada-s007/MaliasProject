@@ -1,0 +1,110 @@
+{% load malias_tags %}
+<div class="shop-filter">
+    <div class="area-title">
+        <h3 class="title-group gfont-1">Filter Products</h3>
+    </div>
+    <h4 class="shop-price-title">Price</h4>
+    <div class="info_widget">
+        <div class="price_filter">
+        <form method="GET" action="?{% query_params pricerange=request.GET.price %}">
+            <div id="slider-range"></div>
+            <div class="price_slider_amount">
+                <input type="text" id="amount" name="price" placeholder="No pricing filter applied"/>
+                <input type="submit" value="Apply"/>
+            </div>
+                <input type="reset" name="price" placeholder="None" value="Reset Price" style="border:0; width: 100%;">
+        </form>
+        </div>
+    </div>
+</div>
+<!-- filter-by start -->
+<div class="accordion_one">
+
+
+    {% if subcategories and category and not 'search' in request.path %}
+    {% filter_by category as filter_by %}
+    <h4><a class="accordion-trigger" data-toggle="collapse" href="#divzero">
+        {% if filter_by == 'Brand' %}
+        Manufacturer
+        {% elif filter_by == 'Type' %}
+        Type
+        {% else %}
+        Subcategory
+        {% endif %}
+    </a></h4>
+    <div id="divzero" class="collapse in">
+        <div class="filter-menu">
+            <ul>
+                <li><a href="?{% query_params subcat=None page=1 %}">----</a></li>
+                {% for subcat in subcategories%}
+                <li><a href="?{% query_params subcat=subcat.slug  page=1%}">{{subcat.title}}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    {% elif not subcategories and category and not 'search' in request.path %}
+        <h4><a class="accordion-trigger" data-toggle="collapse" href="#div1">Categories</a></h4>
+    <div id="div1" class="collapse in">
+        <div class="filter-menu">
+            <ul>
+                                <li><a href="?{% query_params cat=None page=1 %}">----</a></li>
+
+    {% main_categories as cats %}
+                {% for cat in cats %}
+                <li><a href="?{% query_params cat=cat.slug page=1%}">{{cat.title}}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    {% elif 'brand' in request.path %}
+            <h4><a class="accordion-trigger" data-toggle="collapse" href="#div1">Categories</a></h4>
+    <div id="div1" class="collapse in">
+        <div class="filter-menu">
+            <ul>
+                                <li><a href="?{% query_params cat=None page=1 %}">----</a></li>
+
+    {% main_categories as cats %}
+                {% for cat in cats %}
+                <li><a href="?{% query_params cat=cat.slug page=1%}">{{cat.title}}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    {% elif 'compare' in request.path %}
+    {% endif %}
+{% if not filter_by == 'Brand' and not 'brand' in request.path and not 'compare' in request.path %}
+    <h4><a class="accordion-trigger" data-toggle="collapse" href="#div2">Manufacturer</a></h4>
+    <div id="div2" class="collapse in">
+        <div class="filter-menu">
+            <ul>
+                <li><a href="?{% query_params brand=None page=1 %}">----</a></li>
+                {% if category %}
+                {% for brand in category.get_category_brands %}
+                <li><a href="?{% query_params brand=brand.slug page=1%}">{{brand.title}}</a></li>
+                {% endfor %}
+                {% else %}
+                {% all_brands as brands %}
+                {% for brand in brands %}
+                <li><a href="?{% query_params brand=brand.slug page=1%}">{{brand.title}}</a></li>
+                {% endfor %}
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+{% endif %}
+
+    <h4><a class="accordion-trigger" data-toggle="collapse" href="#div3">Color</a></h4>
+    <div id="div3" class="collapse in">
+        <div class="filter-menu">
+            <ul>
+                <li><a href="?{% query_params color=None page=1%}">----</a></li>
+                {% all_colors as colors %}
+                {% for color in colors %}
+                <li><a href="?{% query_params color=color.slug page=1%}">{{color.title}}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+<!-- filter-by end -->

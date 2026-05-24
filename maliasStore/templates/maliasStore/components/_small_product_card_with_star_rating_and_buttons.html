@@ -1,0 +1,51 @@
+{% load humanize %}
+{% load malias_tags %}
+<div class="single-product">
+    <div class="product-img" >
+        <a href="{{product.get_absolute_url}}"
+        style="display:flex; align-items:center; justify-content:center; max-width:100px!important; max-height: 120px!important; aspect-ratio: 5/6!important;">
+            <img class="primary-img" style="max-width:100px!important; max-height: 120px!important; object-fit: contain; aspect-ratio: 5/6!important;" src="{{product.get_first_image}}"
+                  alt="{{product.title}}">
+        </a>
+    </div>
+    <div class="product-description">
+        <h5><a href="{{product.get_absolute_url}}">{{product.title|truncatechars:15}}</a></h5>
+        <div class="price-box">
+            <span class="price">${{ product.get_price|intcomma }}</span>
+            {% if product.discount %}
+            <span class="old-price">${{ product.price|intcomma }}</span>
+            {% endif %}
+        </div>
+{% include 'maliasStore/components/_rating.html' %}
+        <div class="product-action">
+            <div class="product-button-2">
+                {% if not in_cart %}
+                <form action="" style="display: width: 30px; height: 30px;">
+
+
+                <button data-toggle="tooltip"
+                        formmethod="post" style="background: #666 none repeat scroll 0 0; color: #fff; width: 30px; height: 30px;"
+                        formaction="{% url 'action_cart' product.pk 'add'%}" title="Add To Cart">
+                    <i class="fa fa-shopping-cart"></i>{% csrf_token %}
+                </button>
+
+                {% else %}
+                <a data-toggle="tooltip" href="{% url 'cart' %}" style="background: #26acce !important;"
+                        title="Go To Cart">
+                    <i class="fa fa-shopping-cart"></i>
+                </a>
+                {% endif %}
+                    {% get_wishlist request as favs %}
+                <a class="action_wishlist {% if product in favs %}active {% endif %}"
+                   style="{% if product in favs %}background: #26acce;{% endif %}"
+                   href="{% url 'action_wishlist' product.pk %}" data-toggle="tooltip" title="{% if product in favs %}Remove from {% endif %}Wishlist">
+                    <i
+                        class="fa fa-heart-o"></i></a>
+
+                <a href="{{product.model.get_absolute_url}}" data-toggle="tooltip" title="Compare"><i
+                        class="fa fa-signal"></i></a>
+</form>
+            </div>
+        </div>
+    </div>
+</div>

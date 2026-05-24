@@ -1,0 +1,35 @@
+{% load malias_tags %}
+{% load humanize %}
+{% bestsellers as products %}
+<div class="small-product-area carosel-navigation hidden-sm hidden-xs">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="area-title">
+                <h3 class="title-group gfont-1">Bestsellers</h3>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="active-bestseller sidebar">
+            <div class="col-xs-12">
+                <!-- Start Single-Product -->
+                {% for product in products|slice:":4"%}
+                {% include 'maliasStore/components/_small_product_card_with_star_rating.html' %}
+                {% endfor %}
+                <!-- End Single-Product -->
+
+            </div>
+            {% if products|slice:"4:"%}
+            <div class="col-xs-12">
+                <!--                4 objects per col-->
+                <!-- Start Single-Product -->
+                {% for product in products|slice:"4:8"%}
+                {% include 'maliasStore/components/_small_product_card_with_star_rating.html' %}
+
+                {% endfor %}
+
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>

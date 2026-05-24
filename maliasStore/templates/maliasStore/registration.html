@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<!-- START PAGE-CONTENT -->
+<section class="page-content">
+    <!-- Start Account-Create-Area -->
+    <div class="account-create-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <ul class="page-menu">
+                        <li><a href="index.html">Home</a></li>
+                        <li class="active"><a href="account.html">Account</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="area-title">
+                        <h3 class="title-group gfont-1">Create an Account</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="account-create">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form action="{% url 'register' %}" method="post">
+{% csrf_token %}
+                            <div class="account-create-box">
+                                <h2 class="box-info">Personal Information</h2>
+                                <div class="row">
+                                    <div class="col-sm-4 col-xs-12">
+
+                                        <div class="single-create">
+                                            <p>First Name <sup>*</sup></p>
+                                            {{ form.first_name }}
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4 col-xs-12">
+                                        <div class="single-create">
+                                            <p>Last Name <sup>*</sup></p>
+                                            {{ form.last_name }}
+
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4 col-xs-12">
+                                        <div class="single-create">
+                                            <p>Email Address <sup>*</sup></p>
+                                            {{ form.username }}
+
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4 col-xs-12">
+                                        <div class="single-create">
+                                            <p>Phone Number</p>
+                                            <input name="phone" type="tel" class="form-control" formmethod="post">
+
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12">
+                                        <p class="for-newsletter"><input type="checkbox" name="newsletter" id="id_newsletter"> Sign Up for Newsletter</p>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                            <div class="account-create-box">
+                                {% csrf_token %}
+                                <h2 class="box-info">Login Information</h2>
+                                <div class="row">
+                                    <div class="col-md-4 col-sm-6 col-xs-12">
+                                        <div class="single-create">
+                                            <p>Password <sup>*</sup></p>
+                                            {{form.password1}}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-sm-6 col-xs-12">
+                                        <div class="single-create">
+                                            <p>Confirm Password <sup>*</sup></p>
+                                            {{form.password2}}
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="submit-area">
+                                <p class="required text-right">* Required Fields</p>
+                                <button type="submit" class="btn btn-primary floatright"
+                                        style="margin-left: 10px;">Submit
+                                </button>
+                                <a href="{% url 'auth' %}" class="float-left"><span><i
+                                        class="fa fa-angle-double-left"></i></span> Already have an account? Log in here
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- End Account-Create-Area -->
+</section>
+<!-- END PAGE-CONTENT -->
+
+{% endblock content %}

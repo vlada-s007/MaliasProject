@@ -1,0 +1,16 @@
+{% load malias_tags %}
+{% avg_rating_dict product.get_average_rating as avg_rating %}
+											<span class="rating">
+
+{% for key, value in avg_rating.items %}
+												<button value="{{key}}">
+                                                    {% if value == 'Half' %}
+                                                    <i class="fa fa-star-half-o"></i>
+                                                    {% elif value is True %}
+                                                    <i class="fa fa-star"></i>
+                                                    {% else %}
+                                                    <i class="fa fa-star-o"></i>
+                                                    {% endif %}
+                                                {% endfor %}
+                                                    </button>
+											</span>

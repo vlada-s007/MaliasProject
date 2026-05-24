@@ -1,0 +1,31 @@
+{% load humanize %}
+<div class="single-product">
+    <div class="product-img">
+        <a href="{{ product.get_absolute_url }}">
+            <img class="primary-img"
+                 src="{{ product.get_first_image }}"
+                 alt="Product">
+        </a>
+    </div>
+    <div class="product-description">
+        <h5><a href="{{product.get_absolute_url}}">{{ product.title }}</a></h5>
+
+        <div class="price-box">
+            <span class="price">${{ product.get_price|intcomma }}</span>
+            {% if product.discount %}
+            <span class="old-price">${{ product.price|intcomma }}</span>
+                {% endif %}
+        </div>
+        {% include 'maliasStore/components/_rating.html' %}
+        <div class="product-action">
+            <div class="product-button-2">
+                <a href="" data-toggle="tooltip" title="Add Cart"><i
+                        class="fa fa-shopping-cart"></i></a>
+                <a href="{% url 'action_wishlist' product.pk %}" data-toggle="tooltip" title="Wishlist"><i
+                        class="fa fa-heart-o"></i></a>
+                <a href="{% url 'action_cart' product.pk 'add' %}" data-toggle="tooltip" title="Compare"><i
+                        class="fa fa-signal"></i></a>
+            </div>
+        </div>
+    </div>
+</div>

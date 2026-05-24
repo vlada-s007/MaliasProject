@@ -1,0 +1,418 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load humanize %}
+<!-- START PAGE-CONTENT -->
+<section class="page-content">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="page-menu">
+                    <li><a href="index.html">Home</a></li>
+                    <li class="active"><a href="my-account.html">My Account</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <!-- CATEGORY-MENU-LIST START -->
+                {% include 'maliasStore/components/_category_menu.html' %}
+                <!-- END CATEGORY-MENU-LIST -->
+            </div>
+            <div class="col-md-9">
+                <!-- START PRODUCT-BANNER -->
+                {% include 'maliasStore/components/_product_banner.html' %}
+                <!-- END PRODUCT-BANNER -->
+                <!-- entry-header-area start -->
+                <div class="entry-header-area">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="entry-header">
+                                <h2 class="entry-title">My Account</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- entry-header-area end -->
+                <!-- Start checkout-area -->
+                <div class="checkout-area">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <!-- Accordion start -->
+
+                            <div class="panel-group" id="accordion">
+                                <!-- Start My-First-Address -->
+                                <div class="panel panel_default">
+                                    <form action="{% url 'change_account' %}" method="POST">
+                                        <div class="panel-heading">
+                                            <h4 class="panel-title">
+                                                <a class="accordion-trigger" data-toggle="collapse"
+                                                   data-parent="#accordion"
+                                                   href="#payment-address">My First Address <i
+                                                        class="fa fa-caret-down"></i>
+                                                </a>
+                                            </h4>
+                                        </div>
+                                        <div id="payment-address" class="collapse">
+                                            <div class="panel-body">
+                                                <div class="row">
+                                                    <div class="col-md-6 col-xs-12">
+                                                        {% csrf_token %}
+                                                        <fieldset id="account">
+                                                            <legend>Your Personal Details</legend>
+                                                            <div class="form-group">
+                                                                <label><sup>*</sup>First Name</label>
+                                                                {{user_form.first_name}}
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label><sup>*</sup>Last Name</label>
+                                                                {{user_form.last_name}}
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label><sup>*</sup>E-mail</label>
+                                                                {{user_form.username}}
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label><sup>*</sup>Phone</label>
+                                                                {{customer_form.phone}}
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label>Fax</label>
+                                                                {{customer_form.fax}}
+                                                            </div>
+                                                        </fieldset>
+                                                        <fieldset>
+                                                            <legend>Additional information</legend>
+                                                            {{customer_form.note}}
+                                                        </fieldset>
+                                                    </div>
+                                                    <div class="col-md-6 col-xs-12">
+                                                        <fieldset id="address">
+                                                            <legend>Your Address</legend>
+                                                            <div class="form-group">
+                                                                <label><sup>*</sup>Region</label>
+                                                                {{customer_form.region}}
+
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label><sup>*</sup>City</label>
+                                                                {{customer_form.city}}
+                                                            </div>
+
+                                                            <div class="form-group">
+                                                                <label><sup>*</sup>Postal Code</label>
+                                                                {{customer_form.postal_code}}
+                                                            </div>
+
+                                                            <div class="form-group">
+                                                                <label>Street</label>
+                                                                {{customer_form.street}}
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label>Company</label>
+                                                                {{customer_form.company}}
+
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label>Home</label>
+                                                                {{customer_form.home}}
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label>Flat</label>
+                                                                {{customer_form.flat}}
+                                                            </div>
+                                                        </fieldset>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-xs-12">
+                                                        <div class="checkbox">
+                                                            <label>
+                                                                {{ customer_form.newsletter }}
+                                                                I wish to subscribe to the Malias newsletter.
+                                                            </label>
+                                                        </div>
+                                                        <div class="buttons clearfix">
+                                                            <div class="pull-right">
+                                                                I have read and agree to the
+                                                                <a href="#"><b>Privacy Policy</b></a>
+                                                                <input type="checkbox" name="agree"/>
+                                                                <button type="submit" class="btn btn-primary">Save
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <!-- End My-First-Address -->
+                                <!-- Start Order  -->
+                                {% if not order or not orders %}
+                                <div class="panel panel_default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a class="accordion-trigger collapsed" href="{% url 'cart' %}">No recent
+                                                orders. Go to Cart?</a>
+                                        </h4>
+                                    </div>
+                                </div>
+                                {% else %}
+                                <div class="panel panel_default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a class="accordion-trigger collapsed" data-toggle="collapse"
+                                               data-parent="#accordion" href="#checkout-confirm">Current Order<i
+                                                    class="fa fa-caret-down"></i> </a>
+                                        </h4>
+                                    </div>
+
+                                    <div id="checkout-confirm" class="collapse">
+                                        <div class="panel-body">
+                                            <!-- Start Table -->
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered">
+                                                    <thead>
+                                                    <tr>
+                                                        <td class="text-center">Image</td>
+                                                        <td class="text-left">Name</td>
+                                                        <td class="text-left">Model</td>
+                                                        <td class="text-left">Version</td>
+                                                        <td class="text-left">Quantity</td>
+                                                        <td class="text-right">Unit Price</td>
+                                                        <td class="text-right">Total</td>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    {% for item in order.products.all %}
+                                                    <tr>
+                                                        <td class="text-center">
+                                                            <a href=""
+                                                               style="aspect-ratio: 4/5; max-width: 80px; max-height: 100px;">
+                                                                <img class="img-thumbnail"
+                                                                     style="max-width: 75px; max-height: 95px; padding:5px;"
+                                                                     src="{{item.get_image}}" alt="#"/></a>
+                                                        </td>
+                                                        <td class="text-left">
+                                                            <a href="{% url 'product' slug=item.slug %}">{{item.title}}</a>
+                                                        </td>
+                                                        <td class="text-left">
+                                                            <a href="#" aria-disabled="true">{{item.model}}</a>
+                                                        </td>
+                                                        <td class="text-left">
+                                                            <a href="#" aria-disabled="true">{{item.version}}</a>
+                                                        </td>
+                                                        <td class="text-right">{{item.quantity}}</td>
+                                                        <td class="text-right">${{item.price|intcomma}}</td>
+                                                        <td class="text-right">${{item.total_price|intcomma}}</td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                    </tbody>
+
+                                                    <tfoot>
+
+                                                    <tr>
+                                                     <td class="text-right" colspan="6">
+                                                            <strong>Status:</strong>
+                                                        </td>
+                                                        <td class="text-right">{% if order.completed is True %}Delivered{% else %}Delivery In Progress{% endif %}
+                                                        </td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td class="text-right" colspan="6">
+                                                            <strong>Subtotal:</strong>
+                                                        </td>
+                                                        <td class="text-right">${{order.subtotal|intcomma}}</td>
+                                                    </tr>
+
+                                                    {% if order.voucher %}
+                                                    <tr>
+                                                        <td class="text-right" colspan="6">
+                                                            <strong>Voucher:</strong>
+                                                        </td>
+                                                        <td class="text-right">-${{order.voucher|intcomma}}</td>
+                                                    </tr>
+                                                    {% endif %}
+
+                                                    {% if order.coupon_discount %}
+                                                    <tr>
+                                                        <td class="text-right" colspan="6">
+                                                            <strong>Coupon Discount:</strong>
+                                                        </td>
+                                                        <td class="text-right">-{{order.coupon_discount}}%</td>
+                                                    </tr>
+                                                    {% endif %}
+
+
+                                                    {% if order.delivery_cost %}
+                                                    <tr>
+                                                        <td class="text-right"  colspan="6">
+                                                            <strong>Estimated Delivery Cost:</strong>
+                                                        </td>
+                                                        <td class="text-right">+${{order.delivery_cost}}</td>
+                                                    </tr>
+                                                    {% endif %}
+
+
+                                                    <tr>
+                                                        <td class="text-right"  colspan="6">
+                                                            <strong>Total:</strong>
+                                                        </td>
+                                                        <td class="text-right">${{order.price|intcomma}}</td>
+                                                    </tr>
+                                                    </tfoot>
+                                                </table>
+                                            </div>
+                                            <!-- End Table -->
+                                            <div class="buttons pull-right">
+                                                <a data-toggle="collapse" data-parent="#accordion" href="#order_history"
+                                                   class="accordion-trigger btn btn-primary"
+                                                   data-bs-target="#payment_method" aria-expanded="true" type="button">All
+                                                    Orders</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- End Order -->
+
+
+                                <!-- START Order History And Details -->
+                                <div class="panel panel_default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a class="accordion-trigger collapsed" data-toggle="collapse"
+                                               data-parent="#accordion" href="#order_history">Order History And
+                                                Details <i class="fa fa-caret-down"></i> </a>
+                                        </h4>
+                                    </div>
+                                    <div id="order_history" class="collapse">
+                                        <div class="panel-body">
+                                            <!-- Start Table -->
+                                            {% for order in orders %}
+                                            <h5 style="margin-top: 3px; margin-bottom:3px;">Order #{{order.pk}}</h5>
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered">
+                                                    <thead>
+                                                    <tr>
+                                                        <td class="text-center">Image</td>
+                                                        <td class="text-left">Name</td>
+                                                        <td class="text-left">Model</td>
+                                                        <td class="text-left">Version</td>
+                                                        <td class="text-left">Quantity</td>
+                                                        <td class="text-right">Unit Price</td>
+                                                        <td class="text-right">Total</td>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    {% for item in order.products.all %}
+                                                    <tr>
+                                                        <td class="text-center">
+                                                            <a href=""
+                                                               style="aspect-ratio: 4/5; max-width: 80px; max-height: 100px;">
+                                                                <img class="img-thumbnail"
+                                                                     style="max-width: 75px; max-height: 95px; padding:5px;"
+                                                                     src="{{item.get_image}}" alt="#"/></a>
+                                                        </td>
+                                                        <td class="text-left">
+                                                            <a href="{% url 'product' slug=item.slug %}">{{item.title}}</a>
+                                                        </td>
+                                                        <td class="text-left">
+                                                            <a href="#" aria-disabled="true">{{item.model}}</a>
+                                                        </td>
+                                                        <td class="text-left">
+                                                            <a href="#" aria-disabled="true">{{item.version}}</a>
+                                                        </td>
+                                                        <td class="text-right">{{item.quantity}}</td>
+                                                        <td class="text-right">${{item.price|intcomma}}</td>
+                                                        <td class="text-right">${{item.total_price|intcomma}}</td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                    </tbody>
+
+                                                    <tfoot>
+<tr>
+                                                        <td class="text-right" colspan="6">
+                                                            <strong>Status:</strong>
+                                                        </td>
+                                                        <td class="text-right">{% if order.completed is True  %}Delivered{% else %}Delivery in process{% endif %}
+                                                        </td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td class="text-right" colspan="6">
+                                                            <strong>Subtotal:</strong>
+                                                        </td>
+                                                        <td class="text-right">${{order.subtotal|intcomma}}</td>
+                                                    </tr>
+
+                                                    {% if order.voucher %}
+                                                    <tr>
+                                                        <td class="text-right" colspan="6">
+                                                            <strong>Voucher:</strong>
+                                                        </td>
+                                                        <td class="text-right">-${{order.voucher|intcomma}}</td>
+                                                    </tr>
+                                                    {% endif %}
+
+                                                    {% if order.coupon_discount %}
+                                                    <tr>
+                                                        <td class="text-right" colspan="6">
+                                                            <strong>Coupon Discount:</strong>
+                                                        </td>
+                                                        <td class="text-right">-{{order.coupon_discount}}%</td>
+                                                    </tr>
+                                                    {% endif %}
+
+
+                                                    {% if order.delivery_cost %}
+                                                    <tr>
+                                                        <td class="text-right"  colspan="6">
+                                                            <strong>Estimated Delivery Cost:</strong>
+                                                        </td>
+                                                        <td class="text-right">+${{order.delivery_cost}}</td>
+                                                    </tr>
+                                                    {% endif %}
+
+
+                                                    <tr>
+                                                        <td class="text-right"  colspan="6">
+                                                            <strong>Total:</strong>
+                                                        </td>
+                                                        <td class="text-right">${{order.price|intcomma}}</td>
+                                                    </tr>
+                                                    </tfoot>
+                                                </table>
+                                            </div>
+                                            {% endfor %}
+                                            <!-- End Table -->
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endif %}
+                                <!-- End Order History And Details -->
+                            </div>
+
+                            <!-- Accordion end -->
+                        </div>
+                    </div>
+                </div>
+                <!-- End Shopping-Cart -->
+
+                <!-- My-Account-Area start -->
+                <div class="my-account-area">
+                    <div class="row">
+                        <div class="col-md-6">
+
+                        </div>
+                    </div>
+                </div>
+                <!-- My-Account-Area end -->
+            </div>
+        </div>
+    </div>
+</section>
+<!-- END PAGE-CONTENT -->
+{% endblock content %}
+
